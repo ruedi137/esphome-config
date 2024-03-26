@@ -1,0 +1,122 @@
+esphome:
+  name: aq-hub
+  friendly_name: AQ-Hub
+
+esp32:
+  board: m5stack-atom
+  framework:
+    # type: arduino
+    type: esp-idf
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret api_encryption_key
+
+ota:
+  password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    password: !secret ap_password
+
+captive_portal:
+
+# enable BLE proxy
+# esp32_ble_tracker:
+#   scan_parameters:
+#     interval: 1100ms
+#     window: 1100ms
+#     active: true
+
+# bluetooth_proxy:
+#   active: true 
+
+i2c:
+  - sda: 26
+    scl: 32
+
+uart:
+  rx_pin: GPIO25
+  tx_pin: GPIO21
+  baud_rate: 9600
+
+sensor:
+    # TVOC sensor
+  - platform: sgp30
+    update_interval: 60s
+    eco2:
+      name: "eCO2"
+      accuracy_decimals: 1
+    tvoc:
+      name: "TVOC"
+      accuracy_decimals: 1
+
+    # Co2 sensor:
+  - platform: scd4x
+    ambient_pressure_compensation_source: bme_pressure
+    co2:
+      name: "CO2"
+    temperature:
+      name: "Temperature 2"
+    humidity:
+      name: "Humidity 2"
+
+    # Temp and Pressure sensor:
+  - platform: sht4x
+    temperature:
+      name: "Temperature"
+    humidity:
+      name: "Humidity"
+
+    # Temp and Pressure sensor
+  - platform: bmp280
+    temperature:
+      name: "Temperature 3"
+      oversampling: 16x
+    pressure:
+      name: "Pressure"
+      id: bme_pressure
+    address: 0x76
+
+    # PM sensor
+  - platform: sds011
+    update_interval: 5min
+    pm_2_5:
+      name: "Particulate Matter <2.5µm"
+    pm_10_0:
+      name: "Particulate Matter <10.0µm"
+
+    # multiple gas concentration sensors:
+  - platform: mics_4514
+    nitrogen_dioxide:
+      name: Nitrogen Dioxide
+    carbon_monoxide:
+      name: Carbon Monoxide
+    hydrogen:
+      name: Hydrogen
+    ethanol:
+      name: Ethanol
+    methane:
+      name: Methane
+    ammonia:
+      name: Ammonia
+    update_interval: 60s
+
+
+  # diagnostics:
+  - platform: wifi_signal
+    name: WiFi Signal Strength
+    update_interval: 60s
+    entity_category: "diagnostic"
+
+  - platform: uptime
+    name: Uptime
+    entity_category: "diagnostic"
