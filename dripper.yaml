@@ -1,4 +1,10 @@
-# based on https://devices.esphome.io/devices/ESP-12F-Relay-X4
+# based on 
+#   https://devices.esphome.io/devices/ESP-12F-Relay-X4
+#   https://esphome.io/components/sprinkler#single-controller-three-valves-single-pump
+
+
+substitutions:
+  hide_internal_switches: "false"  # for initial debugging
 
 esphome:
   name: dripper
@@ -7,9 +13,7 @@ esphome:
 esp8266:
   board: esp12e
 
-
-# Enable logging
-logger:
+logger: # Enable logging
 
 # Enable Home Assistant API
 api:
@@ -31,46 +35,62 @@ captive_portal:
 
 # specifics:
 
+sprinkler:
+  - id: dripper_ctrlr
+    main_switch: "Dripper Sprinklers"
+    auto_advance_switch: "Dripper Auto Advance"
+    pump_start_pump_delay: 3s
+    pump_stop_valve_delay: 3s
+    valve_overlap: 3s
+    valves:
+      - valve_switch: "Valve 1"
+        enable_switch: "Enable Valve 1"
+        pump_switch_id: pump
+        run_duration: 90s
+        valve_switch_id: valve1
+      - valve_switch: "Valve 2"
+        enable_switch: "Enable Valve 2"
+        pump_switch_id: pump
+        run_duration: 90s
+        valve_switch_id: valve2
+      - valve_switch: "Valve 3"
+        enable_switch: "Enable Valve 3"
+        pump_switch_id: pump
+        run_duration: 90s
+        valve_switch_id: valve3
 
-output:
+switch:
   - platform: gpio
+    id: pump
+    name: "[INTERNAL] Pump"
+    pin: GPIO15
+    internal: ${hide_internal_switches}
+
+  - platform: gpio
+    id: valve1
+    name: "[INTERNAL] Valve 1"
+    pin: GPIO14
+    internal: ${hide_internal_switches}
+  - platform: gpio
+    id: valve2
+    name: "[INTERNAL] Valve 2"
+    pin: GPIO12
+    internal: ${hide_internal_switches}
+  - platform: gpio
+    id: valve3
+    name: "[INTERNAL] Valve 3"
+    pin: GPIO13
+    internal: ${hide_internal_switches}
+
+# TODO: review usage of LED
+light:
+  - platform: status_led
     pin: GPIO5
     id: led
 
-  - platform: gpio
-    pin: GPIO15
-    id: relay_1
-  - platform: gpio
-    pin: GPIO14
-    id: relay_2
-  - platform: gpio
-    pin: GPIO12
-    id: relay_3
-  - platform: gpio
-    pin: GPIO13
-    id: relay_4
-
-switch:
-  - platform: output
-    id: pump
-    name: "Pump"
-    output: relay_1
-  - platform: output
-    id: valve1
-    name: "Valve 1"
-    output: relay_2
-  - platform: output
-    id: valve2
-    name: "Valve 2"
-    output: relay_3
-  - platform: output
-    id: valve3
-    name: "Valve 3"
-    output: relay_4 
-    
-interval:
-  - interval: 1000ms
-    then:
-      - output.turn_on: led
-      - delay: 200ms
-      - output.turn_off: led
+# interval:
+#   - interval: 1000ms
+#     then:
+#       - light.turn_on: led
+#       - delay: 200ms
+#       - light.turn_off: led
