@@ -44,7 +44,7 @@ sprinkler:
     pump_start_pump_delay: 3s
     pump_stop_valve_delay: 3s
     valve_overlap: 3s
-    repeat_number: "Sprinkler Re"
+    repeat_number: "Sprinkler Repeat"
     valves:
       - valve_switch: "Valve 1"
         enable_switch: "Enable Valve 1"
