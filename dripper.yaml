@@ -48,7 +48,7 @@ sprinkler:
       - valve_switch: "Valve 1"
         enable_switch: "Enable Valve 1"
         pump_switch_id: pump
-        run_duration_number: "Valve 1 Run Duration Valve 1 "
+        run_duration_number: "Run Duration Valve 1 "
         valve_switch_id: valve1
       - valve_switch: "Valve 2"
         enable_switch: "Enable Valve 2"
