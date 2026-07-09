@@ -4,7 +4,7 @@
 
 
 substitutions:
-  hide_internal_switches: "true  # for initial debugging
+  hide_internal_switches: true  # for initial debugging
 
 esphome:
   name: dripper
