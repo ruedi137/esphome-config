@@ -44,7 +44,7 @@ sprinkler:
     pump_start_pump_delay: 3s
     pump_stop_valve_delay: 3s
     valve_overlap: 3s
-    multiplier_number: "Dripp"
+    multiplier_number: "Dripper Duration Multiplier"
     repeat_number: "Dripper Repeat Cycles"
     valves:
       - valve_switch: "Valve 1"
